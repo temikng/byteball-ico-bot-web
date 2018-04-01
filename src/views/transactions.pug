@@ -1,0 +1,73 @@
+extends ./hidden/common-layout
+
+append init
+	-
+		title += "Transactions";
+		nCurrNavLink = 1;
+
+append metas
+	meta(name="keywords" content="Byteball")
+
+append links
+	link(rel="stylesheet" href="/assets/css/table.css")
+	link(rel="stylesheet" href="/assets/css/transactions.css")
+
+append content-main
+
+	form
+		fieldset Filters:
+			.row
+				.col
+					.form-group
+						label(for='t_f_ti') txid
+						input#t_f_ti.form-control(type='text', name="f_ti", placeholder='enter txid',
+						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
+				.col
+					.form-group
+						label(for='t_f_ra') receiving address
+						input#t_f_ra.form-control(type='text', name="f_ra", placeholder='enter receiving address',
+						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
+				.col
+					.form-group
+						label(for='t_f_bb') byteball address
+						input#t_f_bb.form-control(type='text', name="f_bb", placeholder='enter bb address',
+						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
+
+				.col
+					.row
+						.col
+							.form-group
+								label(for='t_f_curr') currency
+								select#t_f_curr.form-control(name="f_curr", onchange="table.actions.onChangeFilter(this)")
+									option all
+									option GBYTE
+									option BTC
+									option ETH
+									option USDT
+						.col
+							.form-group
+								label(for='t_f_s') stable
+								select#t_f_s.form-control(name="f_s", onchange="table.actions.onChangeFilter(this)")
+									option all
+									option true
+									option false
+
+	table.table.table-sm.table-bordered.table-custom
+		thead#thead
+		tbody#tbody
+
+	.fixed-table-pagination
+		.pull-left.pagination-detail
+			span.page-list
+				span.btn-group.dropup
+					select#t_limit.form-control(onchange="table.actions.onChangeLimit(this)")
+						option 10
+						option 25
+						option 50
+				|  rows per page
+		.pull-right.pagination
+			ul.pagination#tpagination
+
+append scripts
+	script(src="/assets/js/table.js")
+	script(src="/assets/js/transactions.js")

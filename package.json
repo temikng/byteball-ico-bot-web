@@ -1,0 +1,36 @@
+{
+  "name": "byteball-ico-bot-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "temikng <temikng@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "./node_modules/.bin/pm2 start pm2.config.js --env production",
+    "dev": "./node_modules/.bin/pm2-dev pm2.config.js",
+    "postinstall": "bower install --allow-root",
+    "test": "make test",
+    "test-client": "karma start",
+    "build": "node ./node_modules/front-end-builder production",
+    "builder": "node ./node_modules/front-end-builder production listen",
+    "build-dev": "node ./node_modules/front-end-builder development",
+    "builder-dev": "node ./node_modules/front-end-builder development listen"
+  },
+  "dependencies": {
+    "config": "^1.30.0",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-validator": "^5.0.3",
+    "foundation-sites": "^6.4.4-rc1",
+    "front-end-builder": "^0.1.6",
+    "highcharts": "^6.0.7",
+    "morgan": "^1.9.0",
+    "sqlite3": "^4.0.0",
+    "vue": "^2.5.16",
+    "vue-highcharts": "^0.0.10",
+    "winston": "2.4.0",
+    "winston-daily-rotate-file": "1.7.2"
+  },
+  "devDependencies": {
+    "pm2": "^2.10.1"
+  }
+}
