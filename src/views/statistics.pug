@@ -17,7 +17,7 @@ append content-main
 	form
 		fieldset Filters:
 			.row
-				.col
+				.col-sm-12.col-md-4
 					.form-group
 						label(for='t_f_curr') currency
 						select#t_f_curr.form-control(name="f_curr", onchange="table.actions.onChangeFilter(this)")
@@ -26,18 +26,19 @@ append content-main
 							option BTC
 							option ETH
 							option USDT
-				.col
+				.col-sm-12.col-md-4
 					.form-group
 						label(for='t_f_df') date from
 						input#t_f_df.form-control(type="text", name="df", placeholder="MM/DD/YYYY")
-				.col
+				.col-sm-12.col-md-4
 					.form-group
 						label(for='t_f_dt') date to
 						input#t_f_dt.form-control(type="text", name="dt", placeholder="MM/DD/YYYY")
 
-	table.table.table-sm.table-bordered.table-custom
-		thead#thead
-		tbody#tbody
+	.content-table
+		table.table.table-sm.table-bordered.table-custom
+			thead#thead
+			tbody#tbody
 
 append scripts
 	script(src="/assets/js/libs/moment.min.js")

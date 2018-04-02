@@ -17,25 +17,25 @@ append content-main
 	form
 		fieldset Filters:
 			.row
-				.col
+				.col-sm-12.col-md-6.col-lg-3
 					.form-group
 						label(for='t_f_ti') txid
 						input#t_f_ti.form-control(type='text', name="f_ti", placeholder='enter txid',
 						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
-				.col
+				.col-sm-12.col-md-6.col-lg-3
 					.form-group
 						label(for='t_f_ra') receiving address
 						input#t_f_ra.form-control(type='text', name="f_ra", placeholder='enter receiving address',
 						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
-				.col
+				.col-sm-12.col-md-6.col-lg-3
 					.form-group
 						label(for='t_f_bb') byteball address
 						input#t_f_bb.form-control(type='text', name="f_bb", placeholder='enter bb address',
 						onblur="table.actions.onChangeFilter(this)", onkeypress="table.actions.onKeyEnter(event)")
 
-				.col
+				.col-sm-12.col-md-6.col-lg-3
 					.row
-						.col
+						.col-sm-6
 							.form-group
 								label(for='t_f_curr') currency
 								select#t_f_curr.form-control(name="f_curr", onchange="table.actions.onChangeFilter(this)")
@@ -44,7 +44,7 @@ append content-main
 									option BTC
 									option ETH
 									option USDT
-						.col
+						.col-sm-6
 							.form-group
 								label(for='t_f_s') stable
 								select#t_f_s.form-control(name="f_s", onchange="table.actions.onChangeFilter(this)")
@@ -52,9 +52,10 @@ append content-main
 									option true
 									option false
 
-	table.table.table-sm.table-bordered.table-custom
-		thead#thead
-		tbody#tbody
+	.content-table
+		table.table.table-sm.table-bordered.table-custom
+			thead#thead
+			tbody#tbody
 
 	.fixed-table-pagination
 		.pull-left.pagination-detail
