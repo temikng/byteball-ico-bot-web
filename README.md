@@ -64,7 +64,7 @@ you can use file `.env` in root of the project for store your environment variab
 
 * `NODE_ENV` - `production` or `development` or other (`development`)
 * `PORT` - port (`80` for `production`, `8080` for `development`)
-* `DB_FILENAME` - path to sqlite3 database
+* `DB_FILENAME` - path to sqlite3 database (`~/.config/ico-bot/byteball.sqlite`)
 * `SSL` - port to database (`false`)
 * `SSL_KEY` - filename of ssl key (`ca.key`)
 * `SSL_CRT` - filename of ssl crt (`ca.crt`)

@@ -33,7 +33,7 @@ config.ssl = ssl;
 const storage = {
 	sqlite: {
 		main: {
-      filename: env.DB_FILENAME
+      filename: env.DB_FILENAME || '~/.config/ico-bot/byteball.sqlite'
 		}
 	},
 };
