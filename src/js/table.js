@@ -23,10 +23,10 @@ class Table {
 
 	loadData() {
 		let params = {
-			p: this.data.page,
-			l: this.data.limit,
+			page: this.data.page,
+			limit: this.data.limit,
 		};
-		if (this.data.sort) params.s = this.data.sort;
+		if (this.data.sort) params.sort = this.data.sort;
 		Object.assign(params, this.data.urlParams, this.data.filter);
 		if (this.data.filterFormat) {
 			let filterFormats = this.data.filterFormat;
@@ -103,7 +103,7 @@ class Table {
 					if (tItem.body) {
 						const body = tItem.body;
 						if (body.format) {
-							val = body.format(val);
+							val = body.format(val, row);
 						}
 					}
 					strTr += `<td>${val}</td>`;
@@ -170,23 +170,23 @@ class Table {
 		let jsonParams = getJsonFromUrl();
 		let isWasChanged = false;
 
-		if (jsonParams.p) {
-			jsonParams.p = Number(jsonParams.p);
-			if (jsonParams.p !== this.data.page) {
-				this.data.page = jsonParams.p;
+		if (jsonParams.page) {
+			jsonParams.page = Number(jsonParams.page);
+			if (jsonParams.page !== this.data.page) {
+				this.data.page = jsonParams.page;
 				isWasChanged = true;
 			}
 		}
-		if (jsonParams.l) {
-			jsonParams.l = Number(jsonParams.l);
-			if (jsonParams.l !== this.data.limit) {
-				this.data.limit = jsonParams.l;
+		if (jsonParams.limit) {
+			jsonParams.limit = Number(jsonParams.limit);
+			if (jsonParams.limit !== this.data.limit) {
+				this.data.limit = jsonParams.limit;
 				$('#t_limit').val(this.data.limit);
 				isWasChanged = true;
 			}
 		}
-		if (jsonParams.s) {
-			let val = jsonParams.s;
+		if (jsonParams.sort) {
+			let val = jsonParams.sort;
 			if (this.data.sort !== val) {
 				this.data.sort = val;
 				if (this.params[val] && this.params[val].head && this.params[val].head.sort) {

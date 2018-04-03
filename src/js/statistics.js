@@ -1,6 +1,6 @@
 const DATE_FORMAT = 'YYYY-MM-DD';
-const $elDateFrom = $('#t_f_df');
-const $elDateTo = $('#t_f_dt');
+const $elDateFrom = $('#t_f_date_from');
+const $elDateTo = $('#t_f_date_to');
 
 const $elTableHead = $('#thead');
 const $elTableBody = $('#tbody');
@@ -11,11 +11,11 @@ let table = new Table({
 		url: '/api/statistic',
 		sort: 'date',
 		filterFormat: {
-			f_df: (val) => val && val.format(DATE_FORMAT),
-			f_dt: (val) => val && val.format(DATE_FORMAT)
+			f_date_from: (val) => val && val.format(DATE_FORMAT),
+			f_date_to: (val) => val && val.format(DATE_FORMAT)
 		},
 		jsonUrlFilterFormat: {
-			f_df: {
+			f_date_from: {
 				toStr: (val) => val && val.format(DATE_FORMAT),
 				toVal: (val) => {
 					try {
@@ -28,7 +28,7 @@ let table = new Table({
 
 				}
 			},
-			f_dt: {
+			f_date_to: {
 				toStr: (val) => val && val.format(DATE_FORMAT),
 				toVal: (val) => {
 					try {
@@ -81,33 +81,33 @@ function initRangeDatePicker() {
 	};
 
 	// console.log('table.data.filter', table.data);
-	if (!table.data.filter.f_df) {
-		table.data.filter.f_df = moment(table.data.filter.f_dt ? table.data.filter.f_dt : undefined).subtract(1, 'years');
+	if (!table.data.filter.f_date_from) {
+		table.data.filter.f_date_from = moment(table.data.filter.f_date_to ? table.data.filter.f_date_to : undefined).subtract(1, 'years');
 	}
-	if (!table.data.filter.f_dt) {
+	if (!table.data.filter.f_date_to) {
 		let now = new Date();
 		now.setHours(0,0,0,0);
-		table.data.filter.f_dt = moment(now);
+		table.data.filter.f_date_to = moment(now);
 	}
 
 	$elDateFrom.datepicker(Object.assign({
-		endDate: table.data.filter.f_dt.toDate(),
+		endDate: table.data.filter.f_date_to.toDate(),
 	}, defaultDatepickerOptions)).on('changeDate', (ev) => {
 		// console.log('change date from', ev);
-		table.data.filter.f_df = moment(ev.date.valueOf());
-		$elDateTo.datepicker('setStartDate', table.data.filter.f_df.toDate());
+		table.data.filter.f_date_from = moment(ev.date.valueOf());
+		$elDateTo.datepicker('setStartDate', table.data.filter.f_date_from.toDate());
 		table.loadData();
 	});
-	$elDateFrom.datepicker('update', table.data.filter.f_df.toDate());
+	$elDateFrom.datepicker('update', table.data.filter.f_date_from.toDate());
 
 	$elDateTo.datepicker(Object.assign({
-		startDate: table.data.filter.f_df.toDate(),
-		endDate: table.data.filter.f_dt.toDate(),
+		startDate: table.data.filter.f_date_from.toDate(),
+		endDate: table.data.filter.f_date_to.toDate(),
 	}, defaultDatepickerOptions)).on('changeDate', (ev) => {
 		// console.log('change date to', ev);
-		table.data.filter.f_dt = moment(ev.date.valueOf());
-		$elDateFrom.datepicker('setEndDate', table.data.filter.f_dt.toDate());
+		table.data.filter.f_date_to = moment(ev.date.valueOf());
+		$elDateFrom.datepicker('setEndDate', table.data.filter.f_date_to.toDate());
 		table.loadData();
 	});
-	$elDateTo.datepicker('update', table.data.filter.f_dt.toDate());
+	$elDateTo.datepicker('update', table.data.filter.f_date_to.toDate());
 }

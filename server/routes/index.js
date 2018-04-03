@@ -13,16 +13,16 @@ router.get('/', (req, res) => {
     });
 });
 
-const checkCurrencyData = checkQuery('f_curr').optional().isIn(['all', 'GBYTE', 'BTC', 'ETH', 'USDT']);
+const checkCurrencyData = checkQuery('f_currency').optional().isIn(['all', 'GBYTE', 'BTC', 'ETH', 'USDT']);
 
 router.get('/transactions', [
-    checkQuery('p').optional().isInt({min:1}),
-    checkQuery('l').optional().isInt({min:1, max:100}),
-    checkQuery('s').optional().isIn(['currency_amount', 'creation_date']),
-    checkQuery('f_bb').optional().trim(),
-    checkQuery('f_ra').optional().trim(),
-    checkQuery('f_ti').optional().trim(),
-    checkQuery('f_s').optional().trim(),
+    checkQuery('page').optional().isInt({min:1}),
+    checkQuery('limit').optional().isInt({min:1, max:100}),
+    checkQuery('sort').optional().isIn(['currency_amount', 'creation_date']),
+    checkQuery('f_bb_address').optional().trim(),
+    checkQuery('f_receiving_address').optional().trim(),
+    checkQuery('f_txid').optional().trim(),
+    checkQuery('f_stable').optional().trim(),
     checkCurrencyData,
 ], (req, res) => {
     const objErrors = validationResult(req);
@@ -32,37 +32,37 @@ router.get('/transactions', [
 
     const data = matchedData(req);
     // set default data values
-    if (!data.p) data.p = 1;
-    if (!data.l) data.l = 10;
+    if (!data.page) data.page = 1;
+    if (!data.limit) data.limit = 10;
     // prepare income data values
-    data.p = Number(data.p);
-    data.l = Number(data.l);
+    data.page = Number(data.page);
+    data.limit = Number(data.limit);
 
-    let numOffset = (data.p - 1) * data.l;
-    let strOrderByField = data.s === 'currency_amount' ? 'currency_amount' : 'creation_date';
+    let numOffset = (data.page - 1) * data.limit;
+    let strOrderByField = data.sort === 'currency_amount' ? 'currency_amount' : 'creation_date';
 
     let arrParams = [];
 
     let strSqlWhere = '1=1';
-    if (data.f_bb) {
+    if (data.f_bb_address) {
         strSqlWhere += ' AND byteball_address = ?';
-        arrParams.push(data.f_bb);
+        arrParams.push(data.f_bb_address);
     }
-    if (data.f_ra) {
+    if (data.f_receiving_address) {
         strSqlWhere += ' AND receiving_address = ?';
-        arrParams.push(data.f_ra);
+        arrParams.push(data.f_receiving_address);
     }
-    if (data.f_ti) {
+    if (data.f_txid) {
         strSqlWhere += ' AND txid = ?';
-        arrParams.push(data.f_ti);
+        arrParams.push(data.f_txid);
     }
-    if (data.f_curr && data.f_curr !== 'all') {
+    if (data.f_currency && data.f_currency !== 'all') {
         strSqlWhere += ' AND currency = ?';
-        arrParams.push(data.f_curr);
+        arrParams.push(data.f_currency);
     }
-    if (data.hasOwnProperty('f_s') && data.f_s !== 'all') {
+    if (data.hasOwnProperty('f_stable') && data.f_stable !== 'all') {
         strSqlWhere += ' AND stable = ?';
-        arrParams.push(['true','1',1].includes(data.f_s) ? 1 : 0);
+        arrParams.push(['true','1',1].includes(data.f_stable) ? 1 : 0);
     }
 
     const arrParamsTotal = arrParams.slice();
@@ -77,7 +77,7 @@ router.get('/transactions', [
     WHERE ${strSqlWhere}
     ORDER BY ${strOrderByField} DESC
     LIMIT ? OFFSET ?`;
-    arrParams.push(data.l, numOffset);
+    arrParams.push(data.limit, numOffset);
 
     log.verbose(strSql);
     log.verbose(arrParams);
@@ -101,7 +101,7 @@ router.get('/transactions', [
 
 router.get('/statistic', [
     checkCurrencyData,
-    checkQuery(['f_df', 'f_dt']).optional().isISO8601(),
+    checkQuery(['f_date_from', 'f_date_to']).optional().isISO8601(),
 ], (req, res) => {
     const objErrors = validationResult(req);
     if (!objErrors.isEmpty()) {
@@ -112,14 +112,14 @@ router.get('/statistic', [
 
     let arrParams = [];
 
-    let strSqlWhere = '1=1';//stable = 1';
-    if (data.f_curr && data.f_curr !== 'all') {
+    let strSqlWhere = 'stable = 1';
+    if (data.f_currency && data.f_currency !== 'all') {
         strSqlWhere += ' AND currency = ?';
-        arrParams.push(data.f_curr);
+        arrParams.push(data.f_currency);
     }
-    if (data.f_df && data.f_dt) {
+    if (data.f_date_from && data.f_date_to) {
         strSqlWhere += ' AND paid_date BETWEEN ? AND ?';
-        arrParams.push(data.f_df, data.f_dt);
+        arrParams.push(data.f_date_from, data.f_date_to);
     }
 
     const strSql = `SELECT
@@ -128,8 +128,8 @@ router.get('/statistic', [
         SUM(currency_amount) AS sum
     FROM transactions
     WHERE ${strSqlWhere}
-    GROUP BY 1
-    ORDER BY 1 ASC`;
+    GROUP BY date
+    ORDER BY date ASC`;
 
     log.verbose(strSql);
     log.verbose(arrParams);

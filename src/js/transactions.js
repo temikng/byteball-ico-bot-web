@@ -10,7 +10,23 @@ let table = new Table({
 		// 'transaction_id': {
 		// 	title: 'id'
 		// },
-		'txid': {},
+		'txid': {
+			body: {
+				format: (val, row) => {
+					switch (row.currency) {
+						case 'GBYTE':
+							return `<a href="https://explorer.byteball.org/#${val}" target="_blank">${val}</a>`;
+						case 'BTC':
+							return `<a href="https://blockchain.info/tx/${val}" target="_blank">${val}</a>`;
+						case 'ETH':
+							return `<a href="https://etherscan.io/tx/${val}" target="_blank">${val}</a>`;
+						case 'USDT':
+							return `<a href="https://omniexplorer.info/search/${val}" target="_blank">${val}</a>`;
+						default: return val;
+					}
+				}
+			}
+		},
 		'receiving_address': {
 			head: {
 				title: 'receiving address',

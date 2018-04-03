@@ -20,7 +20,7 @@ append content-main
 				.col-sm-12.col-md-4
 					.form-group
 						label(for='t_f_curr') currency
-						select#t_f_curr.form-control(name="f_curr", onchange="table.actions.onChangeFilter(this)")
+						select#t_f_curr.form-control(name="f_currency", onchange="table.actions.onChangeFilter(this)")
 							option all
 							option GBYTE
 							option BTC
@@ -28,12 +28,12 @@ append content-main
 							option USDT
 				.col-sm-12.col-md-4
 					.form-group
-						label(for='t_f_df') date from
-						input#t_f_df.form-control(type="text", name="df", placeholder="MM/DD/YYYY")
+						label(for='t_f_date_from') date from
+						input#t_f_date_from.form-control(type="text", name="date_from", placeholder="MM/DD/YYYY")
 				.col-sm-12.col-md-4
 					.form-group
-						label(for='t_f_dt') date to
-						input#t_f_dt.form-control(type="text", name="dt", placeholder="MM/DD/YYYY")
+						label(for='t_f_date_to') date to
+						input#t_f_date_to.form-control(type="text", name="date_to", placeholder="MM/DD/YYYY")
 
 	.content-table
 		table.table.table-sm.table-bordered.table-custom
