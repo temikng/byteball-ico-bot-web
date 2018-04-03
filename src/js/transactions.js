@@ -33,7 +33,7 @@ let table = new Table({
 				},
 			}
 		},
-		// 'tokens': {},
+		'tokens': {},
 		// 'refunded': {},
 		// 'paid_out': {},
 		// 'paid_date': {},
