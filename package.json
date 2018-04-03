@@ -7,7 +7,7 @@
   "scripts": {
     "start": "./node_modules/.bin/pm2 start pm2.config.js --env production",
     "dev": "./node_modules/.bin/pm2-dev pm2.config.js",
-    "postinstall": "bower install --allow-root",
+    "postinstall": "./node_modules/.bin/bower install",
     "test": "make test",
     "test-client": "karma start",
     "build": "node ./node_modules/front-end-builder production",
@@ -31,6 +31,7 @@
     "winston-daily-rotate-file": "1.7.2"
   },
   "devDependencies": {
+    "bower": "1.8.4",
     "pm2": "^2.10.1"
   }
 }
