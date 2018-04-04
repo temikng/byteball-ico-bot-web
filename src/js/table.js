@@ -46,6 +46,7 @@ class Table {
 				this.data.rows = response.rows;
 				this.data.totalItems = response.total;
 				this.data.totalRows = Math.ceil(this.data.totalItems / this.data.limit);
+				this.createHeader();
 				this.createBody();
 				this.createPagination();
 			})
@@ -67,6 +68,11 @@ class Table {
 
 			if (val.head) {
 				const head = val.head;
+				if (head.hasOwnProperty('isAvailable')) {
+					if (typeof head.isAvailable === 'function') {
+						if (!head.isAvailable()) continue;
+					} else if (!head.isAvailable) continue;
+				}
 				if (head.title) {
 					title = head.title;
 				}
@@ -102,6 +108,11 @@ class Table {
 					let val = row[key] ? row[key] : '-';
 					if (tItem.body) {
 						const body = tItem.body;
+						if (body.hasOwnProperty('isAvailable')) {
+							if (typeof body.isAvailable === 'function') {
+								if (!body.isAvailable()) continue;
+							} else if (!body.isAvailable) continue;
+						}
 						if (body.format) {
 							val = body.format(val, row);
 						}
@@ -167,7 +178,7 @@ class Table {
 	}
 
 	checkIsWasChangedUrlParams() {
-		let jsonParams = getJsonFromUrl();
+		let jsonParams = common.getJsonFromUrl();
 		let isWasChanged = false;
 
 		if (jsonParams.page) {
@@ -301,15 +312,7 @@ class TableActions {
 	}
 }
 
-function getJsonFromUrl() {
-	let query = location.search.substr(1);
-	let result = {};
-	query.split("&").forEach((part) => {
-		let item = part.split("=");
-		result[item[0]] = decodeURIComponent(item[1]);
-	});
-	return result;
-}
+
 
 function handleAjaxError(jqXHR, exception) {
 	let msg = '';

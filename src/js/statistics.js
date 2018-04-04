@@ -1,4 +1,5 @@
 const DATE_FORMAT = 'YYYY-MM-DD';
+const $elFilterCurrency = $('#t_f_currency');
 const $elDateFrom = $('#t_f_date_from');
 const $elDateTo = $('#t_f_date_to');
 
@@ -54,7 +55,18 @@ let table = new Table({
 			}
 		},
 		'count': {},
-		'sum': {},
+		'sum': {
+			head: {
+				isAvailable: () => {
+					return $elFilterCurrency.val() !== 'all';
+				}
+			},
+			body: {
+				isAvailable: () => {
+					return $elFilterCurrency.val() !== 'all';
+				}
+			}
+		},
 	}
 }, $elTableHead, $elTableBody);
 window.table = table;

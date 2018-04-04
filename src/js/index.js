@@ -11,12 +11,24 @@ const $elNumberSum = $('#number-sum');
 const $elNumberTransactions = $('#number-transactions');
 const $elNumberUserPaid = $('#number-users-paid');
 const $elNumberUserAll = $('#number-users-all');
+const $elFilterCurrency = $('#t_f_currency');
 
 const animateNumberSeparator = $.animateNumber.numberStepFactories.separator(',');
 
 let timeoutLoadChartData;
 let chart;
 let currType = 'count';
+let filter = {
+	currency: 'all'
+};
+
+let jsonParams = common.getJsonFromUrl();
+if (jsonParams.f_currency) {
+	filter.currency = jsonParams.f_currency;
+	$elFilterCurrency.val(jsonParams.f_currency);
+}
+filter.currency !== 'all' ? $btnSumType.show() : $btnSumType.hide();
+
 if(window.location.hash) {
 	currType = window.location.hash.substring(1);
 	if (!objAvailableTypes.hasOwnProperty(currType)) {
@@ -59,6 +71,23 @@ $(() => {
 	initIntervalToLoadChartData();
 	initIntervalToLoadCommonData();
 });
+
+window.index = {
+	actions: {
+		onChangeCurrency: (el) => {
+			filter.currency = el.value;
+			if (filter.currency !== 'all') {
+				$btnSumType.show();
+			} else {
+				currType = 'count';
+				$btnCountType.addClass('active');
+				$btnSumType.removeClass('active');
+				$btnSumType.hide();
+			}
+			initIntervalToLoadChartData();
+		}
+	}
+};
 
 function chooseType(type) {
 	if (!objAvailableTypes.hasOwnProperty(type)) {
@@ -115,7 +144,17 @@ function initIntervalToLoadChartData() {
 
 function loadChartData() {
 	chart.showLoading();
-	$.get('/api/statistic')
+	let params = {};
+	if (filter.currency) {
+		params.f_currency = filter.currency;
+	}
+
+	if (jsonParams.f_currency !== params.f_currency) {
+		window.history.pushState({}, '', '?' + $.param(params));
+		jsonParams.f_currency = params.f_currency;
+	}
+
+	$.get('/api/statistic', params)
 		.then((response) => {
 			// console.log('response', response);
 

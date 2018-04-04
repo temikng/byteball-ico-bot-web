@@ -6,6 +6,8 @@ const { matchedData, sanitize } = require('express-validator/filter');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(config.storage.sqlite.main.filename);
 
+const arrCurrencies = ['GBYTE', 'BTC', 'ETH', 'USDT'];
+
 router.get('/', (req, res) => {
     res.status(200).json({
         version: process.env.npm_package_version,
@@ -124,8 +126,8 @@ router.get('/statistic', [
 
     const strSql = `SELECT
         date(paid_date) AS date,
-        COUNT(transaction_id) AS count,
-        SUM(currency_amount) AS sum
+        COUNT(transaction_id) AS count
+        ${(data.f_currency && data.f_currency!=='all') ? ', SUM(currency_amount) AS sum': ''} 
     FROM transactions
     WHERE ${strSqlWhere}
     GROUP BY date
